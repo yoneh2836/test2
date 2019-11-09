@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <base href="<%=basePath%>">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+
+    <title>grades</title>
+
+    <meta name="keywords" content="H+">
+    <meta name="description"
+          content="H+">
+
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css?v=4.1.0" rel="stylesheet">
+</head>
+<body>
+<h1>#gradelist:</h1>
+<a data-toggle="modal" data-target="#myModal">添加班级</a>
+<div class="ibox-content">
+    <table
+            class="table table-striped table-bordered table-hover dataTables-example">
+        <thead>
+        <tr>
+            <td>id</td>
+            <td>gno</td>
+            <td>department</td>
+            <td>total</td>
+            <td>opts</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="emp:${emps}">
+            <td th:text="${emp.id}"></td>
+            <td>[[${emp.gno}]]</td>
+            <td th:text="${emp.department}"></td>
+            <td th:text="${emp.total}"></td>
+            <td><a onclick="editGrade(this)">修改</a>||<a th:onclick="'javascript:deleteGrade('+${emp.id}+')'">删除</a>||<a th:href="@{/selectStudentByGrade(grade_id=${emp.id})}">查看班级学生</a></td>
+        </tr>
+        </tbody>
+    </table>
+<!--    <span>
+		<a href="">上一页</a>
+		<a href="">下一页</a>
+		</span>-->
+</div>
+<!-- 添加班级模态框 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">添加班级</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="addGrade">
+                    <div class="form-group">
+                        <label 	style="float: left; padding: 7px 15px 0 27px;">编号</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="id"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label 	style="float: left; padding: 7px 15px 0 27px;">班号</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="gno"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label style="float: left; padding: 7px 15px 0 27px;">专业</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="department"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label 	style="float: left; padding: 7px 15px 0 27px;">人数</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="total"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="addGrade()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 修改班级模态框 -->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel2">修改班级信息</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="updateGrade">
+                    <div class="form-group">
+                        <label 	style="float: left; padding: 7px 15px 0 27px;">编号</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="id" id="id" readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label 	style="float: left; padding: 7px 15px 0 27px;">班号</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="gno" id="gno" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label style="float: left; padding: 7px 15px 0 27px;">专业</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="department" id="department" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label 	style="float: left; padding: 7px 15px 0 27px;">人数</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="total" id="total" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="updateGrade()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function editGrade(obj){
+        var tds= $(obj).parent().parent().find('td');
+        $('#id').val(tds.eq(0).text());
+        $('#gno').val(tds.eq(1).text());
+        $('#department').val(tds.eq(2).text());
+        $('#total').val(tds.eq(3).text());
+        $('#myModal2').modal('show');
+    }
+
+    function updateGrade(){
+        var formData = $("#updateGrade").serialize();
+        $.post("/updateGrade",formData,function(data){
+            if(data === "success"){
+                alert("修改成功");
+                window.location.reload();
+            }else{
+                alert("修改失败");
+                window.location.reload();
+            }
+        })
+    }
+
+    function deleteGrade(id){
+        if(confirm("确认删除该班级吗？")){
+            $.post("/deleteGrade",{"id":id},function(data){
+                if(data === "success"){
+                    alert("成功删除");
+                    window.location.reload();
+                }else if(data === "msg"){
+                    alert("删除失败，班级可能存在未分配的学生");
+                    window.location.reload();
+                }else{
+                    alert("删除失败");
+                    window.location.reload();
+                }
+            })
+        }
+    }
+
+    function addGrade(){
+        var formData = $("#addGrade").serialize();
+        $.post("/addGrade",formData,function(data){
+            if(data === "success"){
+                alert("添加成功");
+                window.location.reload();
+            }else{
+                alert("添加失败");
+                window.location.reload();
+            }
+
+        })
+    }
+</script>
+<script src="js/jquery.min.js?v=2.1.4"></script>
+<script src="js/bootstrap.min.js?v=3.3.6"></script>
+<script src="js/plugins/jeditable/jquery.jeditable.js"></script>
+<!-- Data Tables -->
+<script src="js/plugins/dataTables/jquery.dataTables.js"></script>
+<script src="js/plugins/dataTables/dataTables.bootstrap.js"></script>
+<!-- 自定义js -->
+<script src="js/content.js?v=1.0.0"></script>
+<!-- Page-Level Scripts -->
+<script>
+    $(document).ready(function () {
+        $('.dataTables-example').dataTable();
+        /* Init DataTables */
+        var oTable = $('#editable').dataTable();
+        /* Apply the jEditable handlers to the table */
+        oTable.$('td').editable('../example_ajax.php', {
+            "callback": function (sValue, y) {
+                var aPos = oTable.fnGetPosition(this);
+                oTable.fnUpdate(sValue, aPos[0], aPos[1]);
+            },
+            "submitdata": function (value, settings) {
+                return {
+                    "row_id": this.parentNode.getAttribute('id'),
+                    "column": oTable.fnGetPosition(this)[2]
+                };
+            },
+            "width": "90%",
+            "height": "100%"
+        });
+    });
+
+    function fnClickAddRow() {
+        $('#editable').dataTable().fnAddData([
+            "Custom row",
+            "New row",
+            "New row",
+            "New row",
+            "New row"]);
+    }
+</script>
+</body>
+</html>

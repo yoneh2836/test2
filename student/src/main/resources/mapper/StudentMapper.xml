@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yyh.student.mapper.StudentMapper">
+    <!-- 查询所有的学生信息 -->
+    <select id="selectAllStudent" resultType="com.yyh.student.entity.Student">
+		select * from student
+	</select>
+
+    <!-- 根据学号查询学生-->
+    <select id="selectStudentBySno" parameterType="Integer" resultType="com.yyh.student.entity.Student">
+		select * from student where sno=#{sno}
+	</select>
+
+    <!-- 查询某班所有学生-->
+    <select id="selectStudentByGrade" parameterType="Integer" resultType="com.yyh.student.entity.Student">
+		select * from student where grade_id=#{grade_id}
+	</select>
+
+    <!--查询学生班级编号-->
+    <select id="selectStudentGradeId" parameterType="Integer" resultType="Integer">
+		select grade_id from student where sno=#{sno}
+	</select>
+
+    <!-- 添加学生-->
+    <insert id="addStudent" parameterType="com.yyh.student.entity.Student">
+		insert into student(sno,name,sex,grade_id)
+		values(#{sno},#{name},#{sex},#{grade_id})
+	</insert>
+
+    <!--修改学生信息-->
+    <update id="updateStudentBySno" parameterType="com.yyh.student.entity.Student">
+        update student set name=#{name},sex=#{sex},grade_id=#{grade_id} where sno=#{sno}
+    </update>
+
+    <!--删除学生信息-->
+    <delete id="deleteStudentBySno" parameterType="Integer">
+        delete from student where sno=#{sno}
+    </delete>
+</mapper>
